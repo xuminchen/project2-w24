@@ -19,9 +19,10 @@ if dict.getSize()<=50: # small size dictionary only
     # display BST in order 
     mylist=dict.extractInOrder() # this list of Word objects would be automatically sorted
     print("\nDisplay in order:")
+    print(mylist)
     for w in mylist: print(w)
     
     # display some tree structures
     dict.show("word")
-    dict.show("id")
-    dict.show("index")
+    # dict.show("id")
+    # dict.show("index")
