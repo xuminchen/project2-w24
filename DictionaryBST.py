@@ -9,6 +9,9 @@ class Node:
         self.right = None
         self.index = index
 
+    def __str__(self):
+        return str(self.word)
+
 
 class DictionaryBST:
     # to complete
@@ -86,29 +89,55 @@ class DictionaryBST:
 
         # Print the node based on display_option
         if display_option == 'word':
-            print('\t' * (level * 2)+node.word.getWord())
+            print('\t' * (level * 2) + node.word.getWord())
         elif display_option == 'id':
-            print('\t' * (level * 2)+node.word.getID())
+            print('\t' * (level * 2) + node.word.getID())
         elif display_option == 'index':
-            print('\t' * (level * 2)+str(node.index))
+            print('\t' * (level * 2) + str(node.index))
 
         # Print the children
         self._showHelper(node.left, display_option, level + 1)
 
+    # def search(self, word):
+    #     return self._search_iterative(self.root, word)
+    #
+    # def _search_iterative(self, node, word):
+    #     stack = []
+    #     while node or stack:
+    #         while node:
+    #             if node.word.word == word:
+    #                 return node.word
+    #             elif word < node.word.word:
+    #                 stack.append(node)
+    #                 node = node.left
+    #             else:
+    #                 node = node.right
+    #         if stack:
+    #             node = stack.pop()
+    #     return None
     def search(self, word):
-        return self._search_iterative(self.root, word)
+        current = self.root
+        while current is not None and current.word.getWord() != word:
+            if word < current.word.getWord():
+                current = current.left
+            else:
+                current = current.right
+        return current
 
-    def _search_iterative(self, node, word):
-        stack = []
-        while node or stack:
-            while node:
-                if node.word.word == word:
-                    return node.word
-                elif word < node.word.word:
-                    stack.append(node)
-                    node = node.left
-                else:
-                    node = node.right
-            if stack:
-                node = stack.pop()
-        return None
+    def spell_check(self, filename):
+        with open(filename, 'r',encoding='utf8') as f:
+            lines = f.readlines()
+            f.close()
+        punc = "’!()-[]{};:’\"\,<>./?@#$%^&*_~’"
+        # punc="!"
+        for line in lines:
+            new_line = line.rstrip("\n")
+            print(new_line)
+            new_line = new_line.rstrip(punc)
+            line_result = []
+            for word in new_line.split():
+                search_word = word.lower().lstrip(punc).rstrip(punc)
+                search_node = self.search(search_word)
+                id = search_node.word.getID() if search_node is not None else 'no ID'
+                line_result.append(id)
+            print("[-"+"-".join(line_result)+"-]")
