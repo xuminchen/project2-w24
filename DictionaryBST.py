@@ -18,7 +18,7 @@ class DictionaryBST:
         self.max_level = 0
 
     def load(self, filename):
-        file_path = filename+'.txt'
+        file_path = filename + '.txt'
         with open(file_path, 'r') as file:
             for line in file:
                 word = line.strip().split('\n')[0]
@@ -39,14 +39,14 @@ class DictionaryBST:
                 self.node_count += 1
                 self.max_level = max(self.max_level, current_level + 1)
             else:
-                self._rec_insert(node.left, word_obj, current_level + 1, 2 * current_level + 1)
+                self._rec_insert(node.left, word_obj, current_level + 1, 2 * node.index + 1)
         else:
             if node.right is None:
                 node.right = Node(word_obj, 2 * index + 2)
                 self.node_count += 1
                 self.max_level = max(self.max_level, current_level + 1)
             else:
-                self._rec_insert(node.right, word_obj, current_level + 1, 2 * current_level + 2)
+                self._rec_insert(node.right, word_obj, current_level + 1, 2 * node.index + 2)
 
     def getSize(self):
         return self.node_count
@@ -72,26 +72,28 @@ class DictionaryBST:
             print("Tree is empty.")
             return
 
+        print(f"\nThe BSTree using type -{display_option}- looks like:\n")
         self._showHelper(self.root, display_option, 0)
 
     def _showHelper(self, node, display_option, level):
         if node is None:
             return
 
-            # Print spaces before the node
-        print(' ' * (level * 4), end='')
+        # Print spaces before the node
+        # print('\t' * (level * 4), end='')
+
         self._showHelper(node.right, display_option, level + 1)
+
         # Print the node based on display_option
         if display_option == 'word':
-            print(node.word.getWord())
+            print('\t' * (level * 2)+node.word.getWord())
         elif display_option == 'id':
-            print(node.word.getID())
+            print('\t' * (level * 2)+node.word.getID())
         elif display_option == 'index':
-            print(node.index)
+            print('\t' * (level * 2)+str(node.index))
 
-            # Print the children
+        # Print the children
         self._showHelper(node.left, display_option, level + 1)
-        # self._showHelper(node.right, display_option, level + 1)
 
     def search(self, word):
         return self._search_iterative(self.root, word)
